@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mie Business & Life Guide - Otter Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 🦦 海とラッコをイメージしたふんわりテーマ 🌊 */
+            --bg-main: #f0f8ff;         /* アリスブルー（澄んだ海の色） */
+            --surface: #ffffff;
+            --navy: #4a90e2;            /* ウォーターブルー（メインカラー） */
+            --gold: #ffb74d;            /* 貝殻のふんわりオレンジ */
+            --miso: #8d6e63;            /* 優しいラッコブラウン */
+            --text-main: #4e342e;       /* ダークブラウン（読みやすさ重視） */
+            --text-muted: #795548;
+            --border: #bbdefb;
+            --shadow: 0 8px 24px rgba(74, 144, 226, 0.15);
+            --radius: 16px;             /* ふんわりした角丸 */
+        }
+
+        /* ===== DARK MODE ===== */
+        body.dark-mode {
+            --bg-main: #1e2a38;
+            --surface: #2c3e50;
+            --navy: #64b5f6;
+            --gold: #ffcc80;
+            --miso: #bcaaa4;
+            --text-main: #fdfdfd;
+            --text-muted: #d7ccc8;
+            --border: #455a64;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: var(--text-main);
+            padding: 24px 20px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid #ffffff;
+        }
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            line-height: 1.3;
+        }
+        .header-sub {
+            font-size: 0.8rem;
+            color: var(--miso);
+            margin-top: 6px;
+            letter-spacing: 0.1em;
+        }
+        .date-time {
+            background: rgba(255,255,255,0.7);
+            border-radius: 4px;
+            padding: 6px 14px;
+            display: inline-block;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            border: 1px solid rgba(255,255,255,0.9);
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .theme-toggle-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.9);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* ===== NAV TABS ===== */
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background: var(--surface);
+            padding: 0 10px;
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 14px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            color: var(--navy);
+            border-bottom-color: var(--navy);
+            font-weight: 700;
+        }
+
+        /* ===== SECTIONS & CARDS ===== */
+        .section { display: none; padding: 16px; max-width: 600px; margin: 0 auto; }
+        .section.active { display: block; }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            animation: fadeUp 0.3s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--miso);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px dashed var(--bg-main);
+            padding-bottom: 8px;
+        }
+
+        /* ===== BUTTONS & INPUTS ===== */
+        .btn-primary {
+            width: 100%; padding: 12px; background: var(--navy); color: white;
+            border: none; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: opacity 0.2s;
+        }
+        .btn-primary:active { opacity: 0.8; }
+        
+        .map-action-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .btn-sm {
+            flex: 1 1 30%; min-width: 90px; padding: 8px 4px; background: transparent; border: 1px solid var(--navy);
+            color: var(--navy); border-radius: 8px; font-size: 0.75rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none; display: inline-block;
+        }
+        .btn-sm:hover { background: var(--navy); color: white; }
+        body.dark-mode .btn-sm { border-color: var(--navy); color: var(--navy); }
+        body.dark-mode .btn-sm:hover { background: var(--navy); color: var(--bg-main); }
+        .btn-link { border-color: var(--gold); color: var(--gold); }
+        .btn-link:hover { background: var(--gold); color: white; }
+        body.dark-mode .btn-link { border-color: var(--gold); color: var(--gold); }
+        body.dark-mode .btn-link:hover { background: var(--gold); color: var(--bg-main); }
+
+        .search-input {
+            flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px;
+            font-size: 0.85rem; background: var(--bg-main); color: var(--text-main); outline: none;
+        }
+        .search-input:focus { border-color: var(--gold); }
+        .search-go {
+            padding: 10px 16px; background: var(--gold); color: white; border: none;
+            border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+        }
+
+        .quick-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .qbtn {
+            padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface);
+            font-size: 0.8rem; cursor: pointer; font-weight: 500; color: var(--text-main); text-align: left;
+        }
+        .qbtn:hover { background: var(--bg-main); }
+        .qbtn-strong { border-left: 3px solid var(--navy); }
+
+        /* ===== MAP ===== */
+        iframe.map-frame {
+            width: 100%; height: 240px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-main);
+        }
+
+        /* ===== LISTS & TIPS ===== */
+        .tip-item {
+            background: var(--bg-main); border-radius: 8px; padding: 12px; margin-bottom: 8px; 
+            font-size: 0.85rem; line-height: 1.6; border-left: 3px solid var(--navy);
+        }
+        .tip-item strong { color: var(--miso); display: block; margin-bottom: 4px;}
+        .tip-item a.inline-link { color: var(--navy); font-weight: 500; text-decoration: none; }
+        .tip-item a.inline-link:hover { text-decoration: underline; }
+
+        /* ===== DIARY & TODO ===== */
+        .diary-textarea {
+            width: 100%; min-height: 100px; padding: 12px; border: 1px solid var(--border);
+            border-radius: 8px; font-size: 0.85rem; line-height: 1.6; background: var(--surface);
+            color: var(--text-main); outline: none; resize: vertical; margin-bottom: 12px;
+        }
+        .diary-textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2); }
+        
+        .ai-response {
+            display: none; margin-top: 16px; padding: 16px; background: #e3f2fd; 
+            border: 1px solid var(--border); border-radius: 8px; border-left: 4px solid var(--navy);
+        }
+        body.dark-mode .ai-response { background: #1a252f; border-color: #2c3e50; }
+
+        .todo-item { display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed var(--border); padding: 8px 0; font-size: 0.85rem; }
+        .todo-item.completed span.task-text { text-decoration: line-through; color: var(--text-muted); }
+        .todo-actions { margin-left: auto; display: flex; gap: 4px; }
+        .todo-btn { background: transparent; border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 0.75rem; cursor: pointer; color: var(--text-muted); }
+        .todo-btn:hover { background: var(--bg-main); color: var(--navy); border-color: var(--navy); }
+
+        /* ===== CALCULATOR ===== */
+        .calc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .calc-input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: var(--surface); color: var(--text-main); text-align: right; }
+        
+        footer { text-align: center; padding: 30px 20px; font-size: 0.75rem; color: var(--text-muted); border-top: 1px dashed var(--border); margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="theme-toggle-btn" onclick="document.body.classList.toggle('dark-mode')">画面切替</button>
+    <div class="header-title">Mie Daily & Business</div>
+    <div class="header-sub">お仕事もプライベートも、めっちゃ楽しく快適にするに🦦🌊</div>
+    <div class="date-time" id="dt"></div>
+</header>
+
+<nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('home')">🏠 ホーム</button>
+    <button class="tab-btn" onclick="switchTab('map')">📍 検索・マップ</button>
+    <button class="tab-btn" onclick="switchTab('food')">🍽️ 美し国グルメ</button>
+    <button class="tab-btn" onclick="switchTab('aquarium')">🦦 水族館・海</button>
+    <button class="tab-btn" onclick="switchTab('greatness')">✨ 三重県のすごさ</button>
+    <button class="tab-btn" onclick="switchTab('diary')">📔 業務・日記</button>
+    <button class="tab-btn" onclick="switchTab('calc')">🧮 計算</button>
+    <button class="tab-btn" onclick="switchTab('phrase')">🗣️ 方言</button>
+    <button class="tab-btn" onclick="switchTab('transport')">🚇 交通</button>
+    <button class="tab-btn" onclick="switchTab('tips')">📋 ローカルルール</button>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div class="section active" id="sec-home">
+    <div class="card">
+        <div class="card-title">🌤️ 今日の三重（津市）のお天気やに</div>
+        <div id="weather-content">
+            <div style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.85rem;">⏳ 天気情報を取得してるでな...ちょっと待ってな</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📰 ビジネス・ニュース情報をチェック</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="qbtn qbtn-strong" onclick="window.open('https://www.nikkei.com/','_blank')">
+                <div style="font-weight:700;">日本経済新聞</div><div style="font-size:0.7rem; color:var(--text-muted);">ビジネスニュースの確認やに</div>
+            </button>
+            <button class="qbtn qbtn-strong" style="border-left-color: #ef4444;" onclick="window.open('https://finance.yahoo.co.jp/','_blank')">
+                <div style="font-weight:700;">Yahoo!ファイナンス</div><div style="font-size:0.7rem; color:var(--text-muted);">株価・企業業績のチェックやな</div>
+            </button>
+            <button class="qbtn qbtn-strong" style="border-left-color: #10b981;" onclick="window.open('https://www.isenp.co.jp/','_blank')">
+                <div style="font-weight:700;">伊勢新聞</div><div style="font-size:0.7rem; color:var(--text-muted);">三重県の超ローカルニュースはここ！</div>
+            </button>
+            <button class="qbtn qbtn-strong" style="border-left-color: #3b82f6;" onclick="window.open('https://www3.nhk.or.jp/lnews/tsu/','_blank')">
+                <div style="font-weight:700;">NHK 三重NEWS WEB</div><div style="font-size:0.7rem; color:var(--text-muted);">県内の最新ニュースを動画で確認</div>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAP ===== -->
+<div class="section" id="sec-map">
+    <div class="card">
+        <div class="card-title">📍 現在地周辺・ルート検索</div>
+        <button class="btn-primary" onclick="initMap()" style="margin-bottom:10px;">📡 現在地を取得してマップ表示するに</button>
+        <div id="map-status" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; text-align: center;">ボタンを押すと現在地周辺を表示するでな</div>
+        <iframe id="map-frame" class="map-frame" src="https://maps.google.co.jp/maps?q=津駅&output=embed" allowfullscreen loading="lazy"></iframe>
+        
+        <div style="margin-top:16px;">
+            <div style="font-size:0.85rem; font-weight:600; margin-bottom:8px;">目的地へのルートを調べるに</div>
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="route-dest" class="search-input" placeholder="例：三重県庁、客先名">
+                <button class="search-go" onclick="routeTo('route-dest')">検索</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FOOD (20 items with 3 buttons) ===== -->
+<div class="section" id="sec-food">
+    <div class="card">
+        <div class="card-title">🍽️ 美し国（うましくに）三重の絶品グルメ 20選！</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">全てにお店リンク、現在地からのルート、津駅からのルートを付けたで完璧やに！</div>
+        
+        <div class="tip-item">
+            <strong>1. 🥩 松阪牛（和田金）</strong>
+            肉の芸術品！すき焼きで食べるのが王道。網焼きやステーキも絶品やに。
+            <div class="map-action-btns">
+                <a href="https://e-wadakin.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 松阪市 和田金')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 松阪市 和田金')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>2. 🍜 伊勢うどん（ふくすけ）</strong>
+            極太でふわふわの麺に、濃厚な真っ黒いタレを絡めるんやに。コシがないのが正解！
+            <div class="map-action-btns">
+                <a href="https://okageyokocho.com/main/tenpo/fukusuke/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊勢市 ふくすけ')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊勢市 ふくすけ')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>3. 🍣 てこね寿司（すし久）</strong>
+            カツオやマグロの赤身を醤油ダレに漬け込んで、酢飯に混ぜ込んだ志摩地方の漁師飯。
+            <div class="map-action-btns">
+                <a href="https://okageyokocho.com/main/tenpo/sushikyu/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊勢市 すし久')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊勢市 すし久')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>4. 🍡 赤福 ＆ 朔日餅（赤福本店）</strong>
+            三重のお土産の絶対王者。五十鈴川を眺めながら本店で食べる出来立ては別格やに！
+            <div class="map-action-btns">
+                <a href="https://www.akafuku.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊勢市 赤福本店')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊勢市 赤福本店')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>5. 🍖 四日市とんてき（まつもとの来来憲）</strong>
+            分厚い豚肉をニンニクの効いた濃いソースで焼き上げて、山盛りのキャベツと一緒に食べるガッツリ飯！
+            <div class="map-action-btns">
+                <a href="https://matumoto-rairaiken.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 四日市市 まつもとの来来憲')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 四日市市 まつもとの来来憲')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>6. 🥟 津ぎょうざ（ラーメン いたろう）</strong>
+            直径15cmもある巨大な揚げ餃子！パリパリの皮とジューシーな具がたまらんのやに。
+            <div class="map-action-btns">
+                <a href="https://itarou-tsu.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 津市 ラーメン いたろう')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 津市 ラーメン いたろう')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>7. 🐚 桑名のはまぐり（はまぐりプラザ）</strong>
+            「その手は桑名の焼き蛤」。ふっくらジューシーな身を、網焼きで贅沢にいただくんやに。
+            <div class="map-action-btns">
+                <a href="https://hamaguri-plaza.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 桑名市 はまぐりプラザ')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 桑名市 はまぐりプラザ')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>8. 🦞 伊勢海老（海鮮割烹 華月）</strong>
+            志摩半島は海鮮の宝庫。冬は甘みたっぷりの伊勢海老をお造りや残酷焼きで贅沢に食べるんよ。
+            <div class="map-action-btns">
+                <a href="https://kagetu.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 鳥羽市 海鮮割烹 華月')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 鳥羽市 海鮮割烹 華月')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>9. 🦪 的矢かき（的矢かきテラス）</strong>
+            特許技術で浄化された無菌牡蠣。生で食べても安心で甘みが強く、ふっくらした身が特徴やに。
+            <div class="map-action-btns">
+                <a href="https://matoyakaki.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 志摩市 的矢かきテラス')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 志摩市 的矢かきテラス')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>10. 🍝 亀山みそ焼きうどん（川森食堂）</strong>
+            焼肉の甘辛い赤味噌ダレで、うどんとキャベツ、肉を豪快に焼き上げる最強のB級鉄板料理！
+            <div class="map-action-btns">
+                <a href="https://tabelog.com/mie/A2402/A240202/24001391/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 亀山市 川森食堂')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 亀山市 川森食堂')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>11. 🥬 めはり寿司（めはり寿司 二代目）</strong>
+            熊野地方の郷土料理。高菜の浅漬けの葉でくるんだ大きなおにぎりで、目を見張るほど美味しいんよ。
+            <div class="map-action-btns">
+                <a href="https://www.kumanishi.com/mehari/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 熊野市 めはり寿司 二代目')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 熊野市 めはり寿司 二代目')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>12. 🐟 さんま寿司（徐福寿司）</strong>
+            塩漬けにしたサンマを柚子酢で締めて押し寿司にしたもの。熊野・紀勢地方のお祭りに欠かせん味やに。
+            <div class="map-action-btns">
+                <a href="https://www.jyofukusushi.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 熊野市 徐福寿司')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 熊野市 徐福寿司')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>13. 🥩 伊賀牛（すき焼き 伊賀肉 金谷）</strong>
+            松阪牛に隠れがちやけど地元民が愛する「肉の横綱」。伊賀盆地の寒暖差が育てた赤身の旨味が最高やに。
+            <div class="map-action-btns">
+                <a href="https://ggyc300.gorp.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊賀市 伊賀肉 金谷')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊賀市 伊賀肉 金谷')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>14. 🍲 名張牛汁（奥田）</strong>
+            伊賀牛の肉と地元の野菜を使った和風醤油仕立てのお吸い物風スープ。おにぎりと一緒に食べるんやに。
+            <div class="map-action-btns">
+                <a href="http://www.iku-okuda.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 名張市 奥田')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 名張市 奥田')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>15. 🔥 海女小屋料理（海女小屋はちまんかまど）</strong>
+            現役の海女さんが目の前の囲炉裏でアワビやサザエを焼いてくれる体験型グルメ。新鮮さが段違い！
+            <div class="map-action-btns">
+                <a href="https://amakoya.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 鳥羽市 はちまんかまど')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 鳥羽市 はちまんかまど')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>16. 🍡 へんば餅（へんばや商店 本店）</strong>
+            米粉の皮にこしあんが詰まっとって、両面に焼き色があるんよ。伊勢参りの道中で馬を返した場所の名物やに。
+            <div class="map-action-btns">
+                <a href="https://henbaya.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊勢市 へんばや商店 本店')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊勢市 へんばや商店 本店')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>17. 🫘 なが餅（なが餅笹井屋）</strong>
+            四日市名物。細長く平べったいお餅の中に小豆餡が入っとって、表面を香ばしく焼いてあるんやに。
+            <div class="map-action-btns">
+                <a href="https://www.nagamochi.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 四日市市 なが餅笹井屋')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 四日市市 なが餅笹井屋')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>18. 🍘 かたやき（伊賀菓庵山本）</strong>
+            日本一硬いと言われる伊賀の忍者食。付属の木槌で割ってから口の中でゆっくり溶かすんやに。
+            <div class="map-action-btns">
+                <a href="https://katayaki.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊賀市 伊賀菓庵山本')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊賀市 伊賀菓庵山本')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>19. 🍵 伊勢茶 ＆ お茶スイーツ（深緑茶房）</strong>
+            三重県はお茶の生産量全国トップクラス！濃厚な伊勢茶を使ったパフェや緑茶が楽しめるカフェやに。
+            <div class="map-action-btns">
+                <a href="https://www.shinsyokusabo.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 松阪市 深緑茶房')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 松阪市 深緑茶房')">🚉 津駅から</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>20. 🐷 パールポーク（芳カツ亭）</strong>
+            真珠貝（アコヤ貝）の粉末をエサに混ぜて育てた志摩のブランド豚。脂が甘くて柔らかいとんかつが絶品やに！
+            <div class="map-action-btns">
+                <a href="https://www.yoshikatsutei.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('三重県 志摩市 芳カツ亭')">📍 現在地から</button>
+                <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 志摩市 芳カツ亭')">🚉 津駅から</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== AQUARIUM ===== -->
+<div class="section" id="sec-aquarium">
+    <div class="card">
+        <div class="card-title">🦦 三重は水族館と海の生き物の聖地やに！</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">実は三重県は、海獣（海の哺乳類）ファンにとってはたまらない聖地なんやに。週末の癒やしに絶対おすすめ！</div>
+        
+        <div class="tip-item" style="border-left-color: var(--gold);">
+            <strong>🦦 鳥羽水族館（日本で唯一ラッコに会える！）</strong>
+            飼育種類数日本一（約1,200種）を誇る超巨大水族館！そして何より、**日本で現在ラッコに会えるのはここだけ**やに！（メイちゃんとキラちゃん）。他にも日本で唯一のジュゴン（セレナちゃん）やマナティーなど見どころが多すぎるで！
+            <div class="map-action-btns">
+                <a href="https://aquarium.co.jp/" target="_blank" class="btn-sm btn-link">🔗 公式サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('鳥羽水族館')">🚗 ルート検索</button>
+            </div>
+        </div>
+        
+        <div class="tip-item" style="border-left-color: var(--navy);">
+            <strong>🦭 伊勢シーパラダイス（距離感ゼロ！）</strong>
+            鳥羽水族館から車で少し走った夫婦岩のすぐ隣。「ふれあい」をテーマにしてて、セイウチやツメナシカワウソ、ゴマフアザラシが文字通り目の前（柵なし！）までやってくる、日本一距離感の近い水族館やに。
+            <div class="map-action-btns">
+                <a href="https://ise-seaparadise.com/" target="_blank" class="btn-sm btn-link">🔗 公式サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('伊勢シーパラダイス')">🚗 ルート検索</button>
+            </div>
+        </div>
+
+        <div class="tip-item" style="border-left-color: var(--navy);">
+            <strong>🐬 イルカ島（鳥羽湾めぐり）</strong>
+            鳥羽の港から遊覧船に乗って行くレジャー島。イルカやアシカのショーがのんびり楽しめるし、展望台からの鳥羽湾の景色が最高やに。浦島太郎になった気分が味わえるで！
+            <div class="map-action-btns">
+                <a href="https://shima-marineleisure.com/" target="_blank" class="btn-sm btn-link">🔗 公式サイト</a>
+                <button class="btn-sm" onclick="routeToSpot('鳥羽湾めぐり イルカ島')">🚗 ルート検索</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🐚 知っとる？可愛いラッコの豆知識🦦</div>
+        <div class="tip-item"><strong>1. わきの下に秘密のポケットがあるんやに</strong><br>ラッコのわきの下の皮膚はたるんでて、お気に入りの石や、食べきれなかった貝をしまっておくポケットになっとるんよ。</div>
+        <div class="tip-item"><strong>2. 手をつないで寝るんやに</strong><br>海流で仲間とはぐれないように、寝る時は海藻を体に巻き付けたり、仲間同士で手をつないでプカプカ浮くんやで。</div>
+        <div class="tip-item"><strong>3. 毛繕い（グルーミング）は命がけ</strong><br>皮下脂肪がないから、8億本もある毛の間に空気の層を作って体温を保つんやに。だから1日の大半を毛繕いに費やすきれい好きなんよ。</div>
+        <div class="tip-item"><strong>4. 燃費がめっちゃ悪いんやに</strong><br>冷たい海で体温を維持するために、なんと自分の体重の約20〜30%（人間でいうと毎日ステーキ数十枚分！）のエサを毎日食べやんと生きていけんのやて。</div>
+        <div class="tip-item"><strong>5. ピカピカの「マイストーン」</strong><br>貝を割るための石はそこら辺の石じゃなくて、お気に入りの「マイストーン」をずっと大事にポケットに入れて持ち歩くんやに。</div>
+    </div>
+</div>
+
+<!-- ===== GREATNESS OF MIE (NEW!) ===== -->
+<div class="section" id="sec-greatness">
+    <div class="card">
+        <div class="card-title">✨ 三重県のすごさ 20の真実</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">歴史、文化、地形、特産物…知れば知るほど奥が深い三重の魅力を全部教えるに！すべて公式リンク付きやで。</div>
+        
+        <div class="tip-item"><strong>1. 伊勢神宮（歴史）</strong> 日本人の総氏神である天照大御神を祀る、約2000年の歴史を持つ別格の神社やに。 <a href="https://www.isejingu.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>2. 熊野古道 伊勢路（歴史）</strong> 伊勢神宮から熊野三山へ向かう世界遺産の祈りの道。石畳が美しすぎるんよ。 <a href="https://www.kodo.pref.mie.lg.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>3. 斎王・斎宮跡（歴史）</strong> 飛鳥時代から天皇の代わりに伊勢神宮に仕えた未婚の皇女「斎王」が暮らした幻の宮やに。 <a href="https://www.bunka.pref.mie.lg.jp/saiku/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>4. 伊賀流忍者（歴史）</strong> 服部半蔵や百地丹波など、世界中に知られるNINJAの発祥地！山に囲まれた地形で発達したんやて。 <a href="https://www.iganinja.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>5. 松尾芭蕉の生誕地（文化）</strong> 「奥の細道」で有名な俳聖・松尾芭蕉は、実は伊賀市の出身なんやに。 <a href="https://www.basho-bp.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>6. 本居宣長と国学（文化）</strong> 35年かけて『古事記伝』を完成させた江戸時代の偉大な学者、本居宣長は松阪市で活躍したんよ。 <a href="https://www.norinagakinenkan.com/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>7. 海女（あま）文化（文化）</strong> 鳥羽・志摩は日本一の海女の数を誇る。3000年も前から続く素潜り漁の伝統が今も生きとるに。 <a href="https://tobakanko.jp/ama/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>8. 真珠養殖の発祥（文化）</strong> 御木本幸吉（ミキモト）が世界で初めて真珠の養殖に成功したのが鳥羽の海やに。 <a href="https://www.mikimoto-pearl-museum.co.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>9. 四日市萬古焼（伝統工芸）</strong> 土鍋の国内シェア約8割！耐熱性に優れた「ばんこやき」は冬の食卓に欠かせんのやに。 <a href="https://bankonosato.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>10. 鈴鹿墨（伝統工芸）</strong> 日本で唯一、墨（すみ）の国指定伝統的工芸品に選ばれとるのが鈴鹿墨なんよ。 <a href="https://www.suzukazumi.co.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>11. 伊賀組紐（伝統工芸）</strong> 映画『君の名は。』でも話題になった美しい絹糸を組み上げる技術。着物の帯締めなどに使われるに。 <a href="https://www.igakumihimo.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>12. 伊勢形紙（伝統工芸）</strong> 着物や浴衣の柄を染めるための彫刻技術。鈴鹿市白子町に集積する超絶技巧の匠の技やに。 <a href="https://isekatagami.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>13. リアス海岸の絶景（地形）</strong> 志摩半島の複雑な海岸線は、波が穏やかで豊かな養分を蓄えるから、最高の海産物が育つんよ。 <a href="https://www.kankomie.or.jp/season/detail_62.html" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>14. 日本一の清流・宮川（自然）</strong> 水質日本一に何度も選ばれる、大台町を流れる美しい川。SUPや川遊びの聖地やに。 <a href="https://www.odaitown.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>15. 尾鷲の降水量（気候・林業）</strong> 日本有数の多雨地帯。この豊富な雨が、緻密で美しい高級木材「尾鷲ひのき」を育てるんやに。 <a href="https://owasekanko.com/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>16. 伊勢茶の生産量日本3位（農業）</strong> 静岡、鹿児島に次ぐお茶の大産地！特に日差しを遮って育てる「かぶせ茶」の生産が盛んやに。 <a href="https://www.mie-isecha.org/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>17. 年中とれる南紀みかん（農業）</strong> 温暖な気候の熊野・御浜地域で作られる甘いみかん。「年中みかんがとれる町」として有名やに。 <a href="https://www.ja-mieminami.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>18. みえの安心食材（食の安全）</strong> 県独自の厳しい安全基準をクリアした農林水産物だけが名乗れる認定制度があって、食の意識が高いんよ。 <a href="https://www.pref.mie.lg.jp/shinsan/hp/anshinsyokuzai/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>19. 鳥羽の離島文化（文化）</strong> 答志島や、三島由紀夫『潮騒』の舞台になった神島など、独自の風習と最高の海鮮が残る島々があるんやに。 <a href="https://tobakanko.jp/island/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>20. 鈴鹿サーキット（産業）</strong> F1日本グランプリが開催される世界的コース。本田宗一郎の熱意で生まれ、自動車産業の発展を支えとるに。 <a href="https://www.suzukacircuit.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+    </div>
+</div>
+
+<!-- ===== DIARY ===== -->
+<div class="section" id="sec-diary">
+    <div class="card">
+        <div class="card-title">🤖 AI アシスタント（1日の振り返り）</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">今日の出来事を入力してみてな。AIが優しく丁寧な三重弁で、労いのフィードバックをするに🦦</div>
+        
+        <div style="margin-bottom:12px;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--navy); margin-bottom:6px;">✨ よかったこと（成果・進捗・嬉しかったこと）</div>
+            <textarea class="diary-textarea" id="ai-good-input" placeholder="例：
+・プレゼンがうまくいって、プロジェクトが前進したに！
+・夕食に美味しいご飯が作れて大満足やわ"></textarea>
+        </div>
+        
+        <div style="margin-bottom:12px;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--miso); margin-bottom:6px;">課題（もやもやしたこと・ストレス・改善点）</div>
+            <textarea class="diary-textarea" id="ai-bad-input" placeholder="例：
+・ベンダーとの調整がなかなか進まなくて焦ってるんやに
+・帰りの近鉄が遅延してすごくえらかった..."></textarea>
+        </div>
+        
+        <button class="btn-primary" id="ai-submit-btn" onclick="submitToAI()">送信してAIからお返事をもらう💌</button>
+        
+        <div id="ai-response-area" class="ai-response">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:6px;">🤖 AIからのお返事やに</div>
+            <div id="ai-response-text" style="font-size:0.85rem; line-height:1.7;"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">✅ マイタスク・目標リストやに</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">ブラウザに保存されるけえ、自分だけのToDoリストとして自由に使ってな。</div>
+        
+        <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+            <input type="text" id="todo-input" class="search-input" placeholder="新しいタスクを入力" style="flex: 1; min-width:150px;">
+            <input type="date" id="todo-date" class="search-input" style="width:130px;">
+            <button class="search-go" onclick="addTodo()">追加</button>
+        </div>
+        
+        <div id="todo-list">
+            <!-- JSで動的に追加されます -->
+        </div>
+    </div>
+</div>
+
+<!-- ===== CALC ===== -->
+<div class="section" id="sec-calc">
+    <div class="card">
+        <div class="card-title">🍻 割り勘の計算するに</div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">合計金額</label>
+            <input type="number" id="split-total" class="calc-input" placeholder="例: 15000" oninput="calcSplit()">
+            <span style="font-size:0.85rem;">円</span>
+        </div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">人数</label>
+            <input type="number" id="split-people" class="calc-input" placeholder="例: 3" oninput="calcSplit()">
+            <span style="font-size:0.85rem;">人</span>
+        </div>
+        <div style="text-align:right; font-size:1.1rem; font-weight:700; color:var(--navy); margin-top:12px;">
+            1人あたり：<span id="split-result">0</span> 円やに
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🧾 消費税・税込の計算やに <a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6303.htm" target="_blank" style="font-size:0.7rem; color:var(--gold); margin-left:auto; font-weight:normal; text-decoration:none;">[国税庁WEB]</a></div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">税抜金額</label>
+            <input type="number" id="tax-base" class="calc-input" placeholder="0" oninput="calcTax()">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:10px;">
+            <label style="font-size:0.8rem;"><input type="radio" name="tax-rate" value="1.1" checked onchange="calcTax()"> 10%</label>
+            <label style="font-size:0.8rem;"><input type="radio" name="tax-rate" value="1.08" onchange="calcTax()"> 8% (軽減)</label>
+        </div>
+        <div style="text-align:right; font-size:1.1rem; font-weight:700; color:var(--miso);">
+            税込：<span id="tax-result">0</span> 円やに
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-title">⛽ 交通費・ガソリン代の目安計算</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">週末のドライブや出張前のガソリン代の目安を計算するんよ。</div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">走行距離</label>
+            <input type="number" id="fuel-dist" class="calc-input" placeholder="例: 100" oninput="calcFuel()">
+            <span style="font-size:0.85rem;">km</span>
+        </div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">燃費</label>
+            <input type="number" id="fuel-eff" class="calc-input" placeholder="例: 15" oninput="calcFuel()">
+            <span style="font-size:0.85rem;">km/L</span>
+        </div>
+        <div class="calc-row">
+            <label style="width:70px; font-size:0.85rem;">単価</label>
+            <input type="number" id="fuel-price" class="calc-input" placeholder="例: 170" oninput="calcFuel()">
+            <span style="font-size:0.85rem;">円/L</span>
+        </div>
+        <div style="text-align:right; font-size:1.1rem; font-weight:700; color:var(--navy); margin-top:12px;">
+            目安：<span id="fuel-result">0</span> 円やに
+        </div>
+    </div>
+</div>
+
+<!-- ===== PHRASE ===== -->
+<div class="section" id="sec-phrase">
+    <div class="card">
+        <div class="card-title">🗣️ リアルな三重の方言辞典（アイスブレイク用）</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">関西弁に近いけど少し柔らかいのが特徴。北勢・中勢・南勢でかなり違うんやけど、よく使うものを集めたに。</div>
+        
+        <div class="tip-item"><strong>〜やに / 〜に</strong><br>意味：「〜だよ」。三重県民のアイデンティティ。「これ美味しいやに」「今日は雨やに」と語尾につける魔法の言葉やな。</div>
+        <div class="tip-item"><strong>〜やん / 〜やんか</strong><br>意味：「〜じゃん」。関西圏と同じやけど、「〜やんなぁ（だよね）」と共感を求める時に多用するに。</div>
+        <div class="tip-item"><strong>えらい</strong><br>意味：「疲れた」「しんどい」。東海地方共通やね。「今日は残業でえらかったわー」って言うに。</div>
+        <div class="tip-item"><strong>ささって</strong><br>意味：「明後日の次の日（3日後）」。三重県最大の罠やに！他県で「しあさって」と言う日を「ささって」と言い、4日後を「しあさって」と呼ぶ独自のルールが存在するんや。</div>
+        <div class="tip-item"><strong>つんどる</strong><br>意味：「混雑している」。道が渋滞している時に「道がつんどる」って言うに。「詰んでいる」わけやないでね。</div>
+        <div class="tip-item"><strong>ごーわく</strong><br>意味：「腹が立つ」「怒る」。伊勢地方などでよく使う。「あの態度、ほんまにごーわくわー！」って感じやな。</div>
+        <div class="tip-item"><strong>かすい</strong><br>意味：「パサパサしている」「みずみずしさがない」。主に果物などがハズレだった時に「このりんご、かすいなー」って言うに。</div>
+        <div class="tip-item"><strong>とごる</strong><br>意味：「沈殿する」。お味噌汁の味噌が下に溜まってる時に「味噌がとごっとるで混ぜてな」と使うに。</div>
+        <div class="tip-item"><strong>めいぼ</strong><br>意味：「ものもらい（目の病気）」。「目にめいぼができたんやに〜」と使うで。</div>
+        <div class="tip-item"><strong>にやにやする / にやにや痛い</strong><br>意味：「シクシク痛む」「鈍痛がする」。笑っているわけやなくて、お腹や傷口が痛む時の表現やで誤解せんようにな。</div>
+        <div class="tip-item"><strong>机をつる</strong><br>意味：「机を運ぶ」。名古屋と同じで、大掃除の時に「机つってー」って言うに。</div>
+        <div class="tip-item"><strong>ほやほや</strong><br>意味：「そうそう」「その通り」。相槌を打つ時に使うに。福井県などでも使うけど、三重でもよく聞く言葉やな。</div>
+    </div>
+</div>
+
+<!-- ===== TRANSPORT ===== -->
+<div class="section" id="sec-transport">
+    <div class="card">
+        <div class="card-title">🚇 三重の交通・移動手段</div>
+        <div class="tip-item">
+            <strong>🚆 近鉄（近畿日本鉄道）が絶対的王者</strong> <a href="https://www.kintetsu.co.jp/" target="_blank" class="inline-link">[近鉄WEB]</a><br>
+            三重県の背骨を通る大動脈やに。県内の主要駅（四日市、津、松阪、伊勢市、宇治山田、鳥羽）はすべて近鉄が便利。特急「ひのとり」や「しまかぜ」は乗り心地が最高やで一回乗ってみてな。
+        </div>
+        <div class="tip-item">
+            <strong>🚋 JR（紀勢本線・参宮線・関西本線）</strong> <a href="https://jr-central.co.jp/" target="_blank" class="inline-link">[JR東海WEB]</a><br>
+            近鉄と競合してるエリアもあるけど、本数は少なめ。特急「南紀」や快速「みえ」は名古屋から伊勢・尾鷲方面への移動に便利やに。
+        </div>
+        <div class="tip-item">
+            <strong>🚗 基本は超・車社会</strong><br>
+            南北に長く、電車の通っていないエリアも多いで、大人1人につき車1台が基本やに。国道23号線（名四バイパス）が県民の大動脈！
+        </div>
+        <div class="tip-item">
+            <strong>🚌 三重交通（バス）</strong> <a href="https://www.sanco.co.jp/" target="_blank" class="inline-link">[三重交通WEB]</a><br>
+            県内を網羅する路線バス。伊勢神宮への移動（外宮〜内宮など）や、駅から離れた観光地へのアクセスは三交バスが頼りやに。
+        </div>
+    </div>
+</div>
+
+<!-- ===== TIPS (20 items) ===== -->
+<div class="section" id="sec-tips">
+    <div class="card">
+        <div class="card-title">📋 知っておきたい！三重のローカルルール 20連発</div>
+        
+        <div class="tip-item"><strong>1. 近鉄王国やに</strong><br>移動手段のベースは近鉄。「アーバンライナー」や「伊勢志摩ライナー」など特急の充実度は日本屈指やで。</div>
+        <div class="tip-item"><strong>2. 日本一短い地名「津（Z）」</strong><br>県庁所在地の「津（Tsu）」。ローマ字1文字「Z」で表現されることもあって、ギネスブックにも登録されたことがあるんやに。</div>
+        <div class="tip-item"><strong>3. ささって（3日後）の罠</strong><br>他県民が「しあさって」と言う日（3日後）を、三重では「ささって」と呼ぶ。約束の日付を間違えやすいけえ注意やに。</div>
+        <div class="tip-item"><strong>4. 結婚式・結納が派手</strong><br>特に伊勢や松阪などの中南勢エリアでは、昔から結婚式を豪華にする風習があるに。トラックに嫁入り道具を透明なガラス張りにして運ぶこともあったんやて。</div>
+        <div class="tip-item"><strong>5. 「赤福」の朔日餅は戦い</strong><br>毎月1日にだけ販売される「朔日餅（ついたちもち）」。これを買うために前日の夜中や早朝から本店に並ぶのが月イチのイベントやに。</div>
+        <div class="tip-item"><strong>6. 餅まきの文化（お菓子まき）</strong><br>家を建てる時の上棟式や、お祭りなどで大量の餅やお菓子を撒く「餅まき」が大好きやに。みんな袋を持って本気で拾いにいくんやで。</div>
+        <div class="tip-item"><strong>7. 関西文化か？東海文化か？</strong><br>行政区分は「近畿」やけど、経済やテレビ局は「東海（名古屋圏）」。北部の桑名は名古屋文化、南部の伊勢や伊賀は関西文化が混ざり合うんよ。</div>
+        <div class="tip-item"><strong>8. 松阪牛は「すき焼き」で食べるのが最高</strong><br>ステーキもいいけど、地元民は祝い事の時に松阪牛を「すき焼き（砂糖と醤油で直接焼く関西風）」で食べるのが一番の贅沢やと思っとるに。</div>
+        <div class="tip-item"><strong>9. 伊勢神宮は「外宮」から「内宮」へ</strong><br>お伊勢参りは、まず豊受大御神を祀る外宮（げくう）を参拝してから、天照大御神を祀る内宮（ないくう）へ向かうのが正式なルートやに。</div>
+        <div class="tip-item"><strong>10. F1開催時の鈴鹿の渋滞は異常</strong><br>秋に鈴鹿サーキットでF1グランプリが開催される期間は、周辺道路が信じられないほど大渋滞するで車移動は要注意やに。</div>
+        <div class="tip-item"><strong>11. 国道23号線は県民の大動脈</strong><br>愛知県から三重県を縦断する「国道23号線」。トラックも多く交通量が半端ないけど、県民の生活には欠かせない道やに。</div>
+        <div class="tip-item"><strong>12. 小学校の修学旅行は県内が多い</strong><br>「鈴鹿サーキット」や「伊勢・鳥羽」など、県内で完結することが多いに。それだけ県内に魅力的なスポットが詰まってる証拠やな。</div>
+        <div class="tip-item"><strong>13. 伊勢うどんは「コシがない」のが正解</strong><br>「茹ですぎやん！」って言わんといてな。長旅で疲れた参拝客の胃に優しいように、あえて極限まで柔らかく煮込んであるんやに。</div>
+        <div class="tip-item"><strong>14. 志摩スペイン村は「空いてる」のが魅力？</strong><br>待ち時間がほぼゼロで乗れるとバズったパルケエスパーニャ。でもショーのクオリティは超一流で、最近はVtuber効果で大混雑することもあるんよ。</div>
+        <div class="tip-item"><strong>15. 真珠といえばミキモト（英虞湾）</strong><br>世界で初めて真珠の養殖に成功した御木本幸吉の出身地。鳥羽や志摩（英虞湾）には美しい真珠のアクセサリーがたくさん売られとるに。</div>
+        <div class="tip-item"><strong>16. 「VISON」が新定番のデートスポット</strong><br>多気町にできた巨大リゾート「VISON（ヴィソン）」。美味しいごはん、オシャレな雑貨、温泉があって、休日になると大盛況なんよ。</div>
+        <div class="tip-item"><strong>17. ラッコに会えるのは日本でここだけ！</strong><br>昔は色んな水族館におったラッコやけど、今は日本の水族館で会えるのは「鳥羽水族館」だけ。ラッコファンにとってはまさに聖地やに！🦦</div>
+        <div class="tip-item"><strong>18. 大人1人につき車1台がデフォ</strong><br>公共交通機関だけでは生活しにくいエリアも多いで、家族で車を共有するんやなくて、1人1台マイカーを持つのが普通やに。</div>
+        <div class="tip-item"><strong>19. 「伊賀」といえば忍者</strong><br>伊賀市は忍者の里として有名。市役所の職員さんが忍者衣装で仕事をする日があったり、電車に忍者の絵が描いてあったりと忍者愛がすごいんよ。</div>
+        <div class="tip-item"><strong>20. 海女（あま）さん文化が根付く</strong><br>鳥羽や志摩の海では、今でも白い磯着を着た女性（海女さん）が素潜りでアワビやサザエを獲る伝統的な漁法が続いとるんやに。</div>
+    </div>
+</div>
+
+<footer>
+    <div style="font-weight: 700; margin-bottom: 6px;">Mie Life & Business Guide - Otter Edition 🦦</div>
+    <p>日々の業務とプライベートが、めっちゃ充実しますように🐚🌊</p>
+</footer>
+
+<script>
+// ===== DATE/TIME =====
+function updateDateTime() {
+    const now = new Date();
+    const days = ['日','月','火','水','木','金','土'];
+    const d = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日(${days[now.getDay()]})`;
+    const t = now.toTimeString().slice(0,5);
+    document.getElementById('dt').textContent = `${d} ${t}`;
+}
+updateDateTime();
+setInterval(updateDateTime, 10000);
+
+// ===== TAB NAVIGATION =====
+function switchTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    
+    // 全タブのIDを網羅
+    const tabs = ['home','map','food','aquarium','greatness','diary','calc','phrase','transport','tips'];
+    const idx = tabs.indexOf(id);
+    if (idx >= 0) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+// ===== MAP & ROUTE =====
+function routeTo(inputId) {
+    const dest = document.getElementById(inputId).value.trim();
+    if (!dest) { alert('行き先を入力してな'); return; }
+    window.open('https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(dest), '_blank');
+}
+
+function initMap() {
+    const statusEl = document.getElementById('map-status');
+    const frameEl = document.getElementById('map-frame');
+    
+    if (!navigator.geolocation) { statusEl.textContent = '❌ このブラウザはGPSに対応しとらんみたいやわ'; return; }
+    statusEl.textContent = '⏳ 現在地を取得しとるでな...ちょっと待ってな';
+    
+    navigator.geolocation.getCurrentPosition(
+        (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            frameEl.src = 'https://maps.google.co.jp/maps?q=' + lat + ',' + lng + '&z=15&output=embed';
+            statusEl.textContent = '✅ 現在地取得に成功したよ！周辺マップを表示しとるに';
+        },
+        (err) => {
+            frameEl.src = 'https://maps.google.co.jp/maps?q=津駅&output=embed';
+            statusEl.textContent = '❌ 位置情報が取得できんかったで、津駅周辺を表示しとくね';
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+    );
+}
+
+function searchNearby(kw) {
+    window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(kw + ' 近く'), '_blank');
+}
+
+function openMapSpot(spotName) {
+    window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spotName), '_blank');
+}
+
+function routeToSpot(spotName) {
+    window.open('https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(spotName), '_blank');
+}
+
+// 出発地と目的地を指定するルート検索関数
+function routeFromTo(origin, dest) {
+    window.open('https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin) + '&destination=' + encodeURIComponent(dest), '_blank');
+}
+
+// ===== WEATHER (Tsu, Mie) =====
+async function loadWeather() {
+    try {
+        // 三重県津市の緯度経度
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=34.7303&longitude=136.5086&current=temperature_2m,weathercode,windspeed_10m,relative_humidity_2m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&forecast_days=3`);
+        const d = await r.json();
+        
+        const wmap = { 0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️' };
+        const wdesc = { 0:'快晴やに',1:'晴れやに',2:'一部曇りやな',3:'曇りやに',45:'霧が出とる',48:'霧やな',51:'小雨やに',53:'雨やに',55:'めっちゃ強い雨やで気をつけて',61:'小雨やに',63:'雨やに',65:'めっちゃ強い雨やに',71:'小雪やな',73:'雪やに',75:'大雪やに',80:'にわか雨やに',81:'雨やに',82:'激しい雨やに',95:'雷雨やに',96:'雷雨やに',99:'激しい雷雨やで本当に気をつけてな' };
+        
+        const cur = d.current;
+        const code = cur.weathercode;
+        const icon = wmap[code] || '🌡️';
+        const desc = wdesc[code] || '';
+        
+        document.getElementById('weather-content').innerHTML = `
+            <div style="display:flex; align-items:center; gap:16px; padding:10px 0;">
+                <div style="font-size:3rem;">${icon}</div>
+                <div>
+                    <div style="font-size:2rem; font-weight:300; color:var(--navy);">${Math.round(cur.temperature_2m)}°C</div>
+                    <div style="font-size:0.85rem; color:var(--text-muted);">${desc} ・ 湿度 ${cur.relative_humidity_2m}%</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">今日の最高 ${Math.round(d.daily.temperature_2m_max[0])}° / 最低 ${Math.round(d.daily.temperature_2m_min[0])}°やに</div>
+                </div>
+            </div>`;
+    } catch(e) {
+        document.getElementById('weather-content').innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:0.85rem;">天気情報を取得できんかったわ💦<br><a href="https://weather.yahoo.co.jp/weather/24/5310.html" target="_blank" class="inline-link">▶ Yahoo!天気で確認してな</a></div>`;
+    }
+}
+loadWeather();
+
+// ===== CALCULATORS =====
+function calcSplit() {
+    const total = parseFloat(document.getElementById('split-total').value) || 0;
+    const people = parseFloat(document.getElementById('split-people').value) || 1;
+    const res = Math.ceil((total / people) / 100) * 100;
+    document.getElementById('split-result').textContent = res.toLocaleString();
+}
+
+function calcTax() {
+    const base = parseFloat(document.getElementById('tax-base').value) || 0;
+    const rate = parseFloat(document.querySelector('input[name="tax-rate"]:checked').value);
+    document.getElementById('tax-result').textContent = Math.floor(base * rate).toLocaleString();
+}
+
+function calcFuel() {
+    const dist = parseFloat(document.getElementById('fuel-dist').value) || 0;
+    const eff = parseFloat(document.getElementById('fuel-eff').value) || 1;
+    const price = parseFloat(document.getElementById('fuel-price').value) || 0;
+    const res = Math.floor((dist / eff) * price);
+    document.getElementById('fuel-result').textContent = res.toLocaleString();
+}
+
+// ===== AI DIARY =====
+async function submitToAI() {
+    const good = document.getElementById('ai-good-input').value.trim();
+    const bad = document.getElementById('ai-bad-input').value.trim();
+    const btn = document.getElementById('ai-submit-btn');
+    const resArea = document.getElementById('ai-response-area');
+    const resText = document.getElementById('ai-response-text');
+
+    if (!good && !bad) {
+        alert('よかったこと、またはもやもやしたことを入力してな！');
+        return;
+    }
+
+    btn.textContent = '⏳ AIが一生懸命考えとるでな...';
+    btn.disabled = true;
+    resArea.style.display = 'none';
+
+    const now = new Date();
+    const dateString = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+
+    const gasUrl = 'https://script.google.com/macros/s/AKfycbxT2T8HcLaGMSnaKzwR0AbtXu1QD6tZ5e638EHaQwI5zW4nrgTsYTW_QaJFhyoyvg/exec'; 
+
+    const prompt = `あなたは多忙なビジネスパーソンを優しくサポートする優秀な秘書AIです。以下のユーザーの今日の「よかったこと」と「悪かったこと」を分析し、明日への活力となるような労いと論理的なフィードバックを2〜3文程度で返してください。トーンは丁寧で温かみがあり、語尾や表現に「自然で上品な三重弁（〜やに、〜な、〜てな、など）」を使ってください。極端な不自然な方言は避けてください。
+【今日の日付】${dateString}
+【よかったこと】
+${good}
+【悪かったこと】
+${bad}`;
+
+    try {
+        const response = await fetch(gasUrl, {
+            method: 'POST',
+            body: JSON.stringify({ prompt: prompt })
+        });
+        
+        const data = await response.json();
+        resText.innerHTML = data.message.replace(/\n/g, '<br>');
+        resArea.style.display = 'block';
+    } catch (error) {
+        resText.innerHTML = '通信エラーが起きちゃったみたいやに。ネットワーク環境を確認するか、GASの設定を見直してみてな。';
+        resArea.style.display = 'block';
+    } finally {
+        btn.textContent = '送信してAIからお返事をもらう💌';
+        btn.disabled = false;
+    }
+}
+
+// ===== TODO LIST =====
+let todos = JSON.parse(localStorage.getItem('mie_otter_todos')) || [];
+
+function renderTodos() {
+    const list = document.getElementById('todo-list');
+    list.innerHTML = '';
+    if (todos.length === 0) {
+        list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding:10px;">タスクはまだないに、追加してみてな</div>';
+        return;
+    }
+    todos.forEach((t, i) => {
+        const div = document.createElement('div');
+        div.className = `todo-item ${t.completed ? 'completed' : ''}`;
+        
+        const dateStr = t.date ? `<span style="font-size:0.75rem; color:var(--miso); margin-right:8px; font-weight:600;">[${t.date}]</span>` : '';
+        
+        div.innerHTML = `
+            <input type="checkbox" style="width:16px;height:16px; cursor:pointer;" ${t.completed ? 'checked' : ''} onchange="toggleTodo(${i})">
+            ${dateStr}
+            <span class="task-text" style="flex:1;">${escapeHTML(t.text)}</span>
+            <div class="todo-actions">
+                <button class="todo-btn" onclick="editTodo(${i})" title="編集">✏️</button>
+                <button class="todo-btn" onclick="deleteTodo(${i})" title="削除">🗑️</button>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+    localStorage.setItem('mie_otter_todos', JSON.stringify(todos));
+}
+
+function addTodo() {
+    const input = document.getElementById('todo-input');
+    const dateInput = document.getElementById('todo-date');
+    const text = input.value.trim();
+    if(!text) { alert('タスクを入力してな'); return; }
+    todos.push({ text: text, date: dateInput.value, completed: false });
+    input.value = '';
+    dateInput.value = '';
+    renderTodos();
+}
+
+function toggleTodo(index) {
+    todos[index].completed = !todos[index].completed;
+    renderTodos();
+}
+
+function deleteTodo(index) {
+    if(confirm('このタスクを削除してもええ？')) {
+        todos.splice(index, 1);
+        renderTodos();
+    }
+}
+
+function editTodo(index) {
+    const newText = prompt('タスクを編集してな:', todos[index].text);
+    if(newText !== null && newText.trim() !== '') {
+        const newDate = prompt('期日を編集してな (YYYY-MM-DD):', todos[index].date || '');
+        todos[index].text = newText.trim();
+        todos[index].date = newDate || '';
+        renderTodos();
+    }
+}
+
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+}
+
+// 初期描画
+renderTodos();
+</script>
+</body>
+</html>
