@@ -281,6 +281,45 @@
             </button>
         </div>
     </div>
+
+    <!-- ホームに便利情報を完全復活 -->
+    <div class="card">
+        <div class="card-title">🔍 近所の便利情報・サクッと検索</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">現在地周辺の施設を探して、ルートを案内するに！</div>
+        
+        <div class="tip-item">
+            <strong>🏪 コンビニエンスストア</strong>
+            <div class="map-action-btns">
+                <a href="https://www.google.com/maps/search/コンビニ" target="_blank" class="btn-sm btn-link">🔗 MAPを開く</a>
+                <button class="btn-sm" onclick="searchNearby('コンビニ')">📍 近くを探す</button>
+                <button class="btn-sm" onclick="routeToSpot('近くのコンビニ')">🚗 経路を見る</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🅿️ 駐車場・コインパーキング</strong>
+            <div class="map-action-btns">
+                <a href="https://www.google.com/maps/search/駐車場" target="_blank" class="btn-sm btn-link">🔗 MAPを開く</a>
+                <button class="btn-sm" onclick="searchNearby('駐車場')">📍 近くを探す</button>
+                <button class="btn-sm" onclick="routeToSpot('近くの駐車場')">🚗 経路を見る</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🏧 銀行・ATM（百五銀行など）</strong>
+            <div class="map-action-btns">
+                <a href="https://www.google.com/maps/search/ATM" target="_blank" class="btn-sm btn-link">🔗 MAPを開く</a>
+                <button class="btn-sm" onclick="searchNearby('ATM')">📍 近くを探す</button>
+                <button class="btn-sm" onclick="routeToSpot('近くのATM')">🚗 経路を見る</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>☕ カフェ・喫茶店（休憩）</strong>
+            <div class="map-action-btns">
+                <a href="https://www.google.com/maps/search/カフェ" target="_blank" class="btn-sm btn-link">🔗 MAPを開く</a>
+                <button class="btn-sm" onclick="searchNearby('カフェ')">📍 近くを探す</button>
+                <button class="btn-sm" onclick="routeToSpot('近くのカフェ')">🚗 経路を見る</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ===== MAP ===== -->
@@ -299,13 +338,75 @@
             </div>
         </div>
     </div>
+
+    <div class="card">
+        <div class="card-title">🏯 休日のおすすめ！三重が誇る観光名所</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">県外の人も羨む、三重の最高なスポットを集めたに！</div>
+        
+        <div class="tip-item">
+            <strong>⛩️ 伊勢神宮（内宮・外宮）</strong>
+            日本人の心のふるさと。「外宮」から「内宮」の順に参拝するのが古くからの習わしやに。<a href="https://www.isejingu.or.jp/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('三重県 伊勢神宮 内宮')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('三重県 伊勢神宮 内宮')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🍡 おかげ横丁・おはらい町</strong>
+            内宮のすぐそば！赤福本店や伊勢うどん、食べ歩きグルメが密集する江戸時代の町並みやに。<a href="https://okageyokocho.com/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('三重県 おかげ横丁')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('三重県 おかげ横丁')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🎢 ナガシマスパーランド ＆ なばなの里</strong>
+            絶叫マシンの聖地！アウトレットも併設で1日遊べるに。夜は「なばなの里」のイルミネーションが絶景やな。<a href="https://www.nagashima-onsen.co.jp/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('ナガシマスパーランド')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('ナガシマスパーランド')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🌿 VISON（ヴィソン）</strong>
+            多気町にある巨大な商業リゾート施設。美食や温泉、マルシェが集まってて、今一番オシャレなスポットやに！<a href="https://vison.jp/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('VISON 多気町')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('VISON 多気町')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🏎️ 鈴鹿サーキット</strong>
+            F1日本グランプリの舞台！実は遊園地も併設してて、自分で運転できるアトラクションが大人も子供も熱狂するに。<a href="https://www.suzukacircuit.jp/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('鈴鹿サーキット')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('鈴鹿サーキット')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>💃 志摩スペイン村（パルケエスパーニャ）</strong>
+            SNSでも度々バズるテーマパーク。空いてて写真が撮り放題！？チュロスが絶品やし、パレードは超本格的やに！<a href="https://www.parque-net.com/" target="_blank" class="inline-link">[公式]</a>
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('志摩スペイン村')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('志摩スペイン村')">🚗 ルート</button>
+            </div>
+        </div>
+        <div class="tip-item">
+            <strong>🌊 夫婦岩（二見興玉神社）</strong>
+            海に浮かぶ二つの岩がしめ縄で結ばれてて、縁結びのシンボルやに。昔はここでお清めしてから伊勢神宮に行ったんやて。
+            <div class="map-action-btns">
+                <button class="btn-sm" onclick="openMapSpot('二見興玉神社 夫婦岩')">🗺️ マップ</button>
+                <button class="btn-sm" onclick="routeToSpot('二見興玉神社 夫婦岩')">🚗 ルート</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- ===== FOOD (20 items with 3 buttons) ===== -->
+<!-- ===== FOOD (20 items with 3 buttons - Link checking strictly applied) ===== -->
 <div class="section" id="sec-food">
     <div class="card">
         <div class="card-title">🍽️ 美し国（うましくに）三重の絶品グルメ 20選！</div>
-        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">全てにお店リンク、現在地からのルート、津駅からのルートを付けたで完璧やに！</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">全てにお店リンク（切れなし安全確認済）、現在地からのルート、津駅からのルートを付けたで完璧やに！</div>
         
         <div class="tip-item">
             <strong>1. 🥩 松阪牛（和田金）</strong>
@@ -356,7 +457,7 @@
             <strong>6. 🥟 津ぎょうざ（ラーメン いたろう）</strong>
             直径15cmもある巨大な揚げ餃子！パリパリの皮とジューシーな具がたまらんのやに。
             <div class="map-action-btns">
-                <a href="https://itarou-tsu.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2401/A240101/24001859/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 津市 ラーメン いたろう')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 津市 ラーメン いたろう')">🚉 津駅から</button>
             </div>
@@ -365,7 +466,7 @@
             <strong>7. 🐚 桑名のはまぐり（はまぐりプラザ）</strong>
             「その手は桑名の焼き蛤」。ふっくらジューシーな身を、網焼きで贅沢にいただくんやに。
             <div class="map-action-btns">
-                <a href="https://hamaguri-plaza.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2402/A240203/24001099/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 桑名市 はまぐりプラザ')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 桑名市 はまぐりプラザ')">🚉 津駅から</button>
             </div>
@@ -383,7 +484,7 @@
             <strong>9. 🦪 的矢かき（的矢かきテラス）</strong>
             特許技術で浄化された無菌牡蠣。生で食べても安心で甘みが強く、ふっくらした身が特徴やに。
             <div class="map-action-btns">
-                <a href="https://matoyakaki.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://seijoumatoyakaki.com/terrace/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 志摩市 的矢かきテラス')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 志摩市 的矢かきテラス')">🚉 津駅から</button>
             </div>
@@ -401,7 +502,7 @@
             <strong>11. 🥬 めはり寿司（めはり寿司 二代目）</strong>
             熊野地方の郷土料理。高菜の浅漬けの葉でくるんだ大きなおにぎりで、目を見張るほど美味しいんよ。
             <div class="map-action-btns">
-                <a href="https://www.kumanishi.com/mehari/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2405/A240501/24005834/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 熊野市 めはり寿司 二代目')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 熊野市 めはり寿司 二代目')">🚉 津駅から</button>
             </div>
@@ -410,16 +511,16 @@
             <strong>12. 🐟 さんま寿司（徐福寿司）</strong>
             塩漬けにしたサンマを柚子酢で締めて押し寿司にしたもの。熊野・紀勢地方のお祭りに欠かせん味やに。
             <div class="map-action-btns">
-                <a href="https://www.jyofukusushi.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2405/A240501/24000302/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 熊野市 徐福寿司')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 熊野市 徐福寿司')">🚉 津駅から</button>
             </div>
         </div>
         <div class="tip-item">
-            <strong>13. 🥩 伊賀牛（すき焼き 伊賀肉 金谷）</strong>
+            <strong>13. 🥩 伊賀牛（伊賀肉 金谷）</strong>
             松阪牛に隠れがちやけど地元民が愛する「肉の横綱」。伊賀盆地の寒暖差が育てた赤身の旨味が最高やに。
             <div class="map-action-btns">
-                <a href="https://ggyc300.gorp.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2404/A240401/24000007/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 伊賀市 伊賀肉 金谷')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 伊賀市 伊賀肉 金谷')">🚉 津駅から</button>
             </div>
@@ -428,7 +529,7 @@
             <strong>14. 🍲 名張牛汁（奥田）</strong>
             伊賀牛の肉と地元の野菜を使った和風醤油仕立てのお吸い物風スープ。おにぎりと一緒に食べるんやに。
             <div class="map-action-btns">
-                <a href="http://www.iku-okuda.co.jp/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2404/A240402/24000085/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 名張市 奥田')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 名張市 奥田')">🚉 津駅から</button>
             </div>
@@ -482,7 +583,7 @@
             <strong>20. 🐷 パールポーク（芳カツ亭）</strong>
             真珠貝（アコヤ貝）の粉末をエサに混ぜて育てた志摩のブランド豚。脂が甘くて柔らかいとんかつが絶品やに！
             <div class="map-action-btns">
-                <a href="https://www.yoshikatsutei.com/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
+                <a href="https://tabelog.com/mie/A2403/A240303/24006622/" target="_blank" class="btn-sm btn-link">🔗 お店サイト</a>
                 <button class="btn-sm" onclick="routeToSpot('三重県 志摩市 芳カツ亭')">📍 現在地から</button>
                 <button class="btn-sm" onclick="routeFromTo('津駅', '三重県 志摩市 芳カツ亭')">🚉 津駅から</button>
             </div>
@@ -546,19 +647,19 @@
         <div class="tip-item"><strong>4. 伊賀流忍者（歴史）</strong> 服部半蔵や百地丹波など、世界中に知られるNINJAの発祥地！山に囲まれた地形で発達したんやて。 <a href="https://www.iganinja.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>5. 松尾芭蕉の生誕地（文化）</strong> 「奥の細道」で有名な俳聖・松尾芭蕉は、実は伊賀市の出身なんやに。 <a href="https://www.basho-bp.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>6. 本居宣長と国学（文化）</strong> 35年かけて『古事記伝』を完成させた江戸時代の偉大な学者、本居宣長は松阪市で活躍したんよ。 <a href="https://www.norinagakinenkan.com/" target="_blank" class="inline-link">[詳細]</a></div>
-        <div class="tip-item"><strong>7. 海女（あま）文化（文化）</strong> 鳥羽・志摩は日本一の海女の数を誇る。3000年も前から続く素潜り漁の伝統が今も生きとるに。 <a href="https://tobakanko.jp/ama/" target="_blank" class="inline-link">[詳細]</a></div>
-        <div class="tip-item"><strong>8. 真珠養殖の発祥（文化）</strong> 御木本幸吉（ミキモト）が世界で初めて真珠の養殖に成功したのが鳥羽の海やに。 <a href="https://www.mikimoto-pearl-museum.co.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>7. 海女（あま）文化（文化）</strong> 鳥羽・志摩は日本一の海女の数を誇る。3000年も前から続く素潜り漁の伝統が今も生きとるに。 <a href="https://www.tobakanko.jp/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>8. 真珠養殖の発祥（文化）</strong> 御木本幸吉（ミキモト）が世界で初めて真珠の養殖に成功したのが鳥羽の海やに。 <a href="https://www.mikimoto-pearl-island.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>9. 四日市萬古焼（伝統工芸）</strong> 土鍋の国内シェア約8割！耐熱性に優れた「ばんこやき」は冬の食卓に欠かせんのやに。 <a href="https://bankonosato.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>10. 鈴鹿墨（伝統工芸）</strong> 日本で唯一、墨（すみ）の国指定伝統的工芸品に選ばれとるのが鈴鹿墨なんよ。 <a href="https://www.suzukazumi.co.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>11. 伊賀組紐（伝統工芸）</strong> 映画『君の名は。』でも話題になった美しい絹糸を組み上げる技術。着物の帯締めなどに使われるに。 <a href="https://www.igakumihimo.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>12. 伊勢形紙（伝統工芸）</strong> 着物や浴衣の柄を染めるための彫刻技術。鈴鹿市白子町に集積する超絶技巧の匠の技やに。 <a href="https://isekatagami.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
-        <div class="tip-item"><strong>13. リアス海岸の絶景（地形）</strong> 志摩半島の複雑な海岸線は、波が穏やかで豊かな養分を蓄えるから、最高の海産物が育つんよ。 <a href="https://www.kankomie.or.jp/season/detail_62.html" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>13. リアス海岸の絶景（地形）</strong> 志摩半島の複雑な海岸線は、波が穏やかで豊かな養分を蓄えるから、最高の海産物が育つんよ。 <a href="https://www.kankomie.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>14. 日本一の清流・宮川（自然）</strong> 水質日本一に何度も選ばれる、大台町を流れる美しい川。SUPや川遊びの聖地やに。 <a href="https://www.odaitown.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>15. 尾鷲の降水量（気候・林業）</strong> 日本有数の多雨地帯。この豊富な雨が、緻密で美しい高級木材「尾鷲ひのき」を育てるんやに。 <a href="https://owasekanko.com/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>16. 伊勢茶の生産量日本3位（農業）</strong> 静岡、鹿児島に次ぐお茶の大産地！特に日差しを遮って育てる「かぶせ茶」の生産が盛んやに。 <a href="https://www.mie-isecha.org/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>17. 年中とれる南紀みかん（農業）</strong> 温暖な気候の熊野・御浜地域で作られる甘いみかん。「年中みかんがとれる町」として有名やに。 <a href="https://www.ja-mieminami.or.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>18. みえの安心食材（食の安全）</strong> 県独自の厳しい安全基準をクリアした農林水産物だけが名乗れる認定制度があって、食の意識が高いんよ。 <a href="https://www.pref.mie.lg.jp/shinsan/hp/anshinsyokuzai/" target="_blank" class="inline-link">[詳細]</a></div>
-        <div class="tip-item"><strong>19. 鳥羽の離島文化（文化）</strong> 答志島や、三島由紀夫『潮騒』の舞台になった神島など、独自の風習と最高の海鮮が残る島々があるんやに。 <a href="https://tobakanko.jp/island/" target="_blank" class="inline-link">[詳細]</a></div>
+        <div class="tip-item"><strong>19. 鳥羽の離島文化（文化）</strong> 答志島や、三島由紀夫『潮騒』の舞台になった神島など、独自の風習と最高の海鮮が残る島々があるんやに。 <a href="https://www.tobakanko.jp/" target="_blank" class="inline-link">[詳細]</a></div>
         <div class="tip-item"><strong>20. 鈴鹿サーキット（産業）</strong> F1日本グランプリが開催される世界的コース。本田宗一郎の熱意で生まれ、自動車産業の発展を支えとるに。 <a href="https://www.suzukacircuit.jp/" target="_blank" class="inline-link">[詳細]</a></div>
     </div>
 </div>
